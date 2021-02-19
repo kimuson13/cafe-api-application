@@ -6,7 +6,6 @@ from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the users objects"""
-
     class Meta:
         model = get_user_model()
         fields = ['email', 'password', 'name']
@@ -14,12 +13,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Create a new user with encrypted password and return it"""
-
         return get_user_model().objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):
         """Update a user, setting the password correctly and return it"""
-
         password = validated_data.pop('password', None)
         user = super().update(instance, validated_data)
 
@@ -32,7 +29,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 class AuthTokenSerializer(serializers.Serializer):
     """Serializer for the user authentication object"""
-
     email = serializers.CharField()
     password = serializers.CharField(
         style={'input-type': 'password'},
@@ -41,7 +37,6 @@ class AuthTokenSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         """Validate and authentivate the user"""
-
         email = attrs.get('email')
         password = attrs.get('password')
 
