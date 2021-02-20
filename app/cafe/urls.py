@@ -6,7 +6,7 @@ from . import views
 
 router = DefaultRouter()
 router.register('tags', views.TagViewSet)
-router.register('cafe', views.CafeViewSet)
+router.register('cafes', views.CafeViewSet)
 
 app_name = 'cafe'
 
