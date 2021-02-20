@@ -50,3 +50,19 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Cafe(models.Model):
+    """Cafe object"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    name = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    opening_time = models.TimeField()
+    close_time = models.TimeField()
+    tags = models.ManyToManyField('Tag')
+
+    def __str__(self):
+        return self.name

@@ -2,7 +2,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, mixins
 
-from core.models import Tag
+from core.models import Tag, Cafe
 
 from . import serializers
 
@@ -22,4 +22,22 @@ class TagViewSet(viewsets.GenericViewSet,
 
     def perform_create(self, serializer):
         """Create a new tag"""
+        serializer.save(user=self.request.user)
+
+
+class CafeViewSet(viewsets.ModelViewSet):
+    """Manage cafe in the datebase"""
+    serializer_class = serializers.CafeSerializer
+    queryset = Cafe.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """Retrieve the cafes for the authenticated user"""
+        queryset = self.queryset
+
+        return queryset.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        """Create a new cafe"""
         serializer.save(user=self.request.user)

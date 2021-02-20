@@ -56,3 +56,15 @@ class ModelTests(TestCase):
         )
 
         self.assertEqual(str(tag), tag.name)
+
+    def test_cafe_str(self):
+        """Test the cafe string representation"""
+        cafe = models.Cafe.objects.create(
+            user=sample_user(),
+            name='test cafe',
+            address='test address-1-1-1',
+            opening_time='10:30',
+            close_time='20:00',
+        )
+
+        self.assertEqual(str(cafe), cafe.name)
