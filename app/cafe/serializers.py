@@ -25,3 +25,8 @@ class CafeSerializer(serializers.ModelSerializer):
             'opening_time', 'close_time'
         ]
         read_only_fields = ['id']
+
+
+class CafeDetailSerializer(CafeSerializer):
+    """Serializer a cafe detail"""
+    tags = TagSerializer(many=True, read_only=True)

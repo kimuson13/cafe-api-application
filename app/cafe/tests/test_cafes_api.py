@@ -8,10 +8,15 @@ from rest_framework.test import APIClient
 
 from core.models import Cafe, Tag
 
-from cafe.serializers import CafeSerializer
+from cafe.serializers import CafeSerializer, CafeDetailSerializer
 
 
 CAFE_URL = reverse('cafe:cafe-list')
+
+
+def detail_url(cafe_id):
+    """Return cafe detail url"""
+    return reverse('cafe:cafe-detail', args=[cafe_id])
 
 
 def sample_tag(user, name='Test tag'):
@@ -25,8 +30,8 @@ def sample_cafe(user, **params):
     default = {
         'name': 'test cafe',
         'address': 'test-address',
-        'opening_time': '10:00',
-        'close_time': '20:00',
+        'opening_time': datetime.time(10),
+        'close_time': datetime.time(20),
     }
     default.update()
 
@@ -85,6 +90,17 @@ class PrivateCafeApiTests(TestCase):
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data, serializer.data)
 
+    def test_view_cafe_detail(self):
+        """Test viewing a cafe detail"""
+        cafe = sample_cafe(user=self.user)
+        cafe.tags.add(sample_tag(user=self.user))
+
+        url = detail_url(cafe.id)
+        res = self.client.get(url)
+
+        serializer = CafeDetailSerializer(cafe)
+        self.assertEqual(res.data, serializer.data)
+
     def test_create_basic_cafe(self):
         """Test creating cafe"""
         payload = {
@@ -119,3 +135,41 @@ class PrivateCafeApiTests(TestCase):
         self.assertEqual(tags.count(), 2)
         self.assertIn(tag1, tags)
         self.assertIn(tag2, tags)
+
+    def test_patial_update_cafe(self):
+        """Test updating a cafe with patch"""
+        cafe = sample_cafe(user=self.user)
+        cafe.tags.add(sample_tag(user=self.user))
+        new_tag = sample_tag(user=self.user, name='test new tag')
+
+        payload = {'name': 'new test cafe', 'tags': [new_tag.id]}
+        url = detail_url(cafe.id)
+        self.client.patch(url, payload)
+
+        cafe.refresh_from_db()
+        self.assertEqual(cafe.name, payload['name'])
+        tags = cafe.tags.all()
+        self.assertEqual(len(tags), 1)
+        self.assertIn(new_tag, tags)
+
+    def test_full_update_cafe(self):
+        """Test updating a cafe with put"""
+        cafe = sample_cafe(user=self.user)
+        cafe.tags.add(sample_tag(user=self.user))
+
+        payload = {
+            'name': 'renewal test cafe',
+            'address': 'newtest address',
+            'opening_time': datetime.time(11),
+            'close_time': datetime.time(22, 30),
+        }
+        url = detail_url(cafe.id)
+        self.client.put(url, payload)
+
+        cafe.refresh_from_db()
+        self.assertEqual(cafe.name, payload['name'])
+        self.assertEqual(cafe.address, payload['address'])
+        self.assertEqual(cafe.opening_time, payload['opening_time'])
+        self.assertEqual(cafe.close_time, payload['close_time'])
+        tags = cafe.tags.all()
+        self.assertEqual(len(tags), 0)
