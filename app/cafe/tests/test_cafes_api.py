@@ -173,3 +173,25 @@ class PrivateCafeApiTests(TestCase):
         self.assertEqual(cafe.close_time, payload['close_time'])
         tags = cafe.tags.all()
         self.assertEqual(len(tags), 0)
+
+    def test_filter_cafe_by_tags(self):
+        """Test returing cafes with specific tags"""
+        cafe1 = sample_cafe(user=self.user, name='test cafe1')
+        cafe2 = sample_cafe(user=self.user, name='test cafe2')
+        tag1 = sample_tag(user=self.user, name='test tag1')
+        tag2 = sample_tag(user=self.user, name='test tag2')
+        cafe1.tags.add(tag1)
+        cafe2.tags.add(tag2)
+        cafe3 = sample_cafe(user=self.user, name='test cafe3')
+
+        res = self.client.get(
+            CAFE_URL,
+            {'tags': f'{tag1.id}, {tag2.id}'}
+        )
+
+        serializer1 = CafeSerializer(cafe1)
+        serializer2 = CafeSerializer(cafe2)
+        serializer3 = CafeSerializer(cafe3)
+        self.assertIn(serializer1.data, res.data)
+        self.assertIn(serializer2.data, res.data)
+        self.assertNotIn(serializer3.data, res.data)
