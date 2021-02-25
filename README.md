@@ -60,6 +60,9 @@ authenticationを満たしていないとこのようなページが表示され
 すると、tagの表示が変わりました。tagを複数登録すると、tagのidだけが表示され、nameは省略されます。次に削除をしてみます。削除はDELETEという赤いボタンを押すことでできます。  
 ![demo24](https://user-images.githubusercontent.com/73643164/109106412-10b25880-7773-11eb-8837-2d3c9d514aa7.png)
 試しに押してみると、このような警告がでます。特に問題なければもう一度DELETEを押します。  
-
+![demo28](https://user-images.githubusercontent.com/73643164/109118147-4ca2e900-7786-11eb-943c-a63f067c0aea.png)
+HTTPのresponseが204 No contentとなっており、削除されていることが分かります。また、タグが含まれているカフェの情報を検索することが可能です。その場合、/api/cafe/cafes/?tags={id}にアクセスします。  
 ![demo25](https://user-images.githubusercontent.com/73643164/109106501-38092580-7773-11eb-839c-14c5f51ff946.png)
-これによりHTTP response
+この画面ではid=1のタグが含まれたカフェを検索していますが、そのようなカフェの情報が存在しないため、何も表示されません。次はid=4にしてみます。 
+![demo26](https://user-images.githubusercontent.com/73643164/109118805-2598e700-7787-11eb-8eb8-53303058e729.png)
+今回はカフェの情報が表示されました。idの部分を確認すると、4になっていることが分かります。
