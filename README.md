@@ -12,4 +12,7 @@ Cafe App APIはカフェの情報を管理する機能を備えているAPIで�
 ・カフェの情報の更新
 ## デモ＆使い方
 上のリンクに飛ぶと、まずこのページが表示される。
+![demo1](https://user-images.githubusercontent.com/73643164/109083514-6540de00-7749-11eb-8db0-269889e2ede6.png)  
+
+
 
