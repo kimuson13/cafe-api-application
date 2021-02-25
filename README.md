@@ -60,5 +60,6 @@ authenticationを満たしていないとこのようなページが表示され
 すると、tagの表示が変わりました。tagを複数登録すると、tagのidだけが表示され、nameは省略されます。次に削除をしてみます。削除はDELETEという赤いボタンを押すことでできます。  
 ![demo24](https://user-images.githubusercontent.com/73643164/109106412-10b25880-7773-11eb-8837-2d3c9d514aa7.png)
 試しに押してみると、このような警告がでます。特に問題なければもう一度DELETEを押します。  
+
 ![demo25](https://user-images.githubusercontent.com/73643164/109106501-38092580-7773-11eb-839c-14c5f51ff946.png)
 これによりHTTP response
